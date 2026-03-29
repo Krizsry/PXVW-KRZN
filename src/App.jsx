@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ViewerTab from './ViewerTab'
 import MakerTab from './MakerTab'
+import PXLoader from './PXLoaders'
 
 const TABS = [
   { id: 'viewer', label: 'Viewer', icon: '◈' },
@@ -9,13 +10,29 @@ const TABS = [
 
 export default function App() {
   const [tab, setTab] = useState('viewer')
+  const [bootLoading, setBootLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBootLoading(false)
+    }, 1400)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <div className="flex flex-col h-screen bg-bg text-white overflow-hidden">
+      {bootLoading && (
+        <PXLoader
+          fullScreen
+          label="Loading PXVW"
+          sublabel="Initializing interface..."
+          size="lg"
+        />
+      )}
 
       {/* ── Header ── */}
       <header className="flex items-center px-5 py-0 bg-surface border-b border-white/[0.04] flex-shrink-0 h-12">
-
         {/* Logo */}
         <div className="flex items-center gap-2.5 mr-6">
           <div className="flex items-center gap-0.5">
@@ -33,7 +50,9 @@ export default function App() {
             ))}
           </div>
           <div className="w-px h-4 bg-white/10" />
-          <span className="text-[10px] font-mono text-white/20 tracking-[0.25em] uppercase">Pixel Viewer</span>
+          <span className="text-[10px] font-mono text-white/20 tracking-[0.25em] uppercase">
+            Pixel Viewer
+          </span>
         </div>
 
         {/* Tabs */}
@@ -54,7 +73,6 @@ export default function App() {
           ))}
         </div>
 
-        {/* Spacer */}
         <div className="flex-1" />
 
         {/* KRZN Credit */}
